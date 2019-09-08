@@ -1,5 +1,8 @@
 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia
+navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.mediaDevices.getUserMedia;
 var p = null
 
 
@@ -10,6 +13,7 @@ function bindEvent(p){
     })
 
     p.on('signal', (data) => {
+        console.log('aa')
         $("#offer").val(JSON.stringify(data))
     })
 
@@ -29,7 +33,6 @@ $("#start").click(() => {
             stream: stream,
             trickle: false
         })
-
         bindEvent(p)
 
 
@@ -46,8 +49,10 @@ $("#receiver-connect").click(() => {
             console.log("aa")
             p = new SimplePeer({
                 initiator: false,
+                stream: stream,
                 trickle: false
             })
+            console.log(p)
             p.signal(JSON.parse($("#answer").val()))
             bindEvent(p)
 
