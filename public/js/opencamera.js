@@ -25,7 +25,7 @@ function bindEvent(p){
 }
 
 $("#start").click(() => {
-    navigator.getUserMedia({video: true, audio: false}, (stream) => {
+    navigator.mediaDevices.getUserMedia({video: true, audio: false}, (stream) => {
 
         p = new SimplePeer({
             initiator: true,
@@ -44,7 +44,7 @@ $("#start").click(() => {
 
 $("#receiver-connect").click(() => {
     if(p == null){
-        navigator.getUserMedia({video: true, audio: false}, (stream) => {
+        navigator.mediaDevices.getUserMedia({video: true, audio: false}, (stream) => {
             console.log("aa")
             p = new SimplePeer({
                 initiator: false,
