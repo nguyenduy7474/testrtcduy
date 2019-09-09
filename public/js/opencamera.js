@@ -25,7 +25,8 @@ function bindEvent(p){
 }
 
 $("#start").click(() => {
-    navigator.mediaDevices.getUserMedia({video: true, audio: false}, (stream) => {
+    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    .then((stream) => {
 
         p = new SimplePeer({
             initiator: true,
@@ -38,14 +39,15 @@ $("#start").click(() => {
         var localStream = document.getElementById("localStream")
         localStream.srcObject = stream;
         localStream.play()
-    }, (err) => {})
+    })
+    .catch((err) =>{console.log(err)})
 
 })
 
 $("#receiver-connect").click(() => {
     if(p == null){
-        navigator.mediaDevices.getUserMedia({video: true, audio: false}, (stream) => {
-            console.log("aa")
+        navigator.mediaDevices.getUserMedia({video: true, audio: false})
+        .then((stream) => {
             p = new SimplePeer({
                 initiator: false,
                 stream: stream,
@@ -59,7 +61,8 @@ $("#receiver-connect").click(() => {
             var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
             localStream.play()
-        }, (err) => {})
+        })
+        .catch((err) => {})
     }else{
         p.signal(JSON.parse($("#answer").val()))
         bindEvent(p)
