@@ -1,8 +1,7 @@
 
 navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia ||
-                         navigator.mediaDevices.getUserMedia;
+                         navigator.mozGetUserMedia ||;
 var p = null
 
 
