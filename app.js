@@ -19,6 +19,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var dateFormat = require('dateformat');
 var now = new Date();
+var Savedata = require('./app/models/savedata');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -63,7 +64,43 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 
 
 //launch ======================================================================
-app.listen(port);
+var server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => { 
+	
+
+	socket.on('disconnect', () => {
+		console.log('???')
+		Savedata.deleteOne({idsocket: socket.id}, (err) => {
+			console.log('cay')
+		})
+	})
+
+	socket.on('SendOfferToServer', (offer) => {
+		Savedata.findOne({}, (err, data) => {
+			if(data){
+				io.sockets.emit("SendOfferConnect", data)
+			}else{
+				let data = {
+					offer: JSON.stringify(offer),
+					idsocket: socket.id
+				}
+
+				let datasave = Savedata(data)
+				datasave.save()
+			}
+		})
+
+	})
+
+	socket.on('SendAnswerToServer', (answer) => {
+		io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
+	})
+});
+
+server.listen(3000);
+/*app.listen(port);*/
 console.log('The magic happens on port ' + port);
 
 //catch 404 and forward to error handler

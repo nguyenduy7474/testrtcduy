@@ -4,4 +4,7 @@ var home = require('../app/controllers/home');
 
 module.exports = function (app, passport) {
     app.get('/', home.home);
+    app.post('/checkuserwait', home.Checkuserwait);
+    app.post('/nhanoffer', home.Nhanoffer);
+    app.post('/nhananswer', home.Nhananswer);
 }
