@@ -61,7 +61,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-
+app.set('port', port);
 
 //launch ======================================================================
 var server = require('http').createServer(app);
@@ -99,7 +99,7 @@ io.on('connection', (socket) => {
 	})
 });
 
-server.listen(3000);
+server.listen(port);
 /*app.listen(port);*/
 console.log('The magic happens on port ' + port);
 
