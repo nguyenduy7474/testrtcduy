@@ -61,14 +61,13 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-app.set('port', port);
 
 //launch ======================================================================
 var server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 io.on('connection', (socket) => { 
-	
+	console.log("kkkk")
 
 	socket.on('disconnect', () => {
 		console.log('???')
@@ -95,6 +94,7 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('SendAnswerToServer', (answer) => {
+		console.log("chay1landuoc roi")
 		io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
 	})
 });

@@ -29,6 +29,7 @@ function bindEvent(p){
 }
 
 socket.on('SendOfferConnect', (offer) => {
+    
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then((stream) => {
         p2 = new SimplePeer({
@@ -40,6 +41,7 @@ socket.on('SendOfferConnect', (offer) => {
         p2.signal(JSON.parse(offer.offer))
 
         p2.on('signal', (answer) => {
+            console.log('chay1landcroiclient')
             socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket})
         })
 
