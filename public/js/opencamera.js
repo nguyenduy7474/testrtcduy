@@ -28,76 +28,6 @@ function bindEvent(p){
 
 }
 
-/*$("#start").click(() => {
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
-    .then((stream) => {
-
-        p = new SimplePeer({
-            initiator: true,
-            stream: stream,
-            trickle: false
-        })
-
-        bindEvent(p)
-
-
-        var localStream = document.getElementById("localStream")
-        localStream.srcObject = stream;
-        localStream.play()
-    })
-    .catch((err) =>{console.log(err)})
-
-})*/
-
-/*$("#receiver-connect").click(() => {
-    if(p == null){
-        navigator.mediaDevices.getUserMedia({video: true, audio: false})
-        .then((stream) => {
-            p = new SimplePeer({
-                initiator: false,
-                stream: stream,
-                trickle: false
-            })
-            console.log(p)
-            p.signal(JSON.parse($("#answer").val()))
-            bindEvent(p)
-
-
-            var localStream = document.getElementById("localStream")
-            localStream.srcObject = stream;
-            localStream.play()
-        })
-        .catch((err) => {})
-    }else{
-        p.signal(JSON.parse($("#answer").val()))
-        bindEvent(p)
-    }
-})*/
-/*function senddataoffer(offer, peer){
-    $.ajax({
-        type: "POST",
-        url: "/nhanoffer",
-        data: {offer: offer, peer: peer},
-        success: function(data){
-            console.log('doi ket noi')
-        }
-    })
-}*/
-
-/*function senddataanswer(answer, id){
-    console.log(id)
-    $.ajax({
-        type: "POST",
-        url: "/nhananswer",
-        data: {answer: answer, id: id},
-        success: function(data){
-            console.log('ok r đó')
-        }
-    })
-}*/
-
-
-
 socket.on('SendOfferConnect', (offer) => {
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then((stream) => {
@@ -139,7 +69,11 @@ $("#start").click(() => {
             p.on('signal', (offer) => {
                 socket.emit("SendOfferToServer", offer)
             })
-            
+            p.on('stream', (stream) =>{
+                var friendStream = document.getElementById("friendStream")
+                friendStream.srcObject = stream
+                friendStream.play()
+            })
 
             var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
