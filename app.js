@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('SendOfferToServer', (offer) => {
-		Savedata.findOne({}, (err, data) => {
+		Savedata.findOne({datatype: "savedata"}, (err, data) => {
 			if(data){
 				io.sockets.emit("SendOfferConnect", data)
 			}else{
@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('SendAnswerToServer', (answer) => {
-		console.log("chay1landuoc roi")
+		console.log(answer)
 		io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
 	})
 });

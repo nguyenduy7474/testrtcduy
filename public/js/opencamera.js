@@ -1,5 +1,5 @@
 var socket = io("https://testrtcduy.herokuapp.com")
-//var socket = io("http://localhost:3000")
+//var socket = io("localhost:3000")
 
 
 
@@ -38,13 +38,12 @@ socket.on('SendOfferConnect', (offer) => {
             trickle: false
         })
         
-        p2.signal(JSON.parse(offer.offer))
 
         p2.on('signal', (answer) => {
             console.log('chay1landcroiclient')
             socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket})
         })
-
+        p2.signal(JSON.parse(offer.offer))
 /*        p2.on('stream', (stream) =>{
             var friendStream = document.getElementById("friendStream")
             friendStream.srcObject = stream
