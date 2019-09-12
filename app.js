@@ -65,9 +65,9 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 //launch ======================================================================
 var server = require('http').createServer(app);
 const io = require('socket.io')(server);
-
+var arrsocketid = []
 io.on('connection', (socket) => { 
-	console.log("kkkk")
+	
 
 	socket.on('disconnect', () => {
 		console.log('???')
@@ -93,9 +93,14 @@ io.on('connection', (socket) => {
 
 	})
 
-	socket.on('SendAnswerToServer', (answer) => {
-		console.log(answer)
-		io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
+	socket.on('aaa', (answer) => {
+		console.log(arrsocketid.indexOf(answer.idsocket))
+		console.log(arrsocketid)
+		if(arrsocketid.indexOf(answer.idsocket) == -1){
+			console.log(answer.idsocket)
+			arrsocketid.push(answer.idsocket)
+			io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
+		}
 	})
 });
 

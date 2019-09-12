@@ -40,15 +40,16 @@ socket.on('SendOfferConnect', (offer) => {
         
 
         p2.on('signal', (answer) => {
-            console.log('chay1landcroiclient')
-            socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket})
+            console.log(answer)
+            socket.emit("aaa", {answer: answer, idsocket: offer.idsocket})
         })
         p2.signal(JSON.parse(offer.offer))
-/*        p2.on('stream', (stream) =>{
+
+        p2.on('stream', (stream) =>{
             var friendStream = document.getElementById("friendStream")
             friendStream.srcObject = stream
             friendStream.play()
-        })*/
+        })
 
         var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
@@ -78,6 +79,7 @@ $("#start").click(() => {
 })
 
 socket.on('SendAnswerToConnect', (answer) => {
+    console.log(answer)
     p.signal(answer)
     p.on('signal', () => {
         console.log('s')
@@ -87,4 +89,5 @@ socket.on('SendAnswerToConnect', (answer) => {
         friendStream.srcObject = stream
         friendStream.play()
     })
+
 })
