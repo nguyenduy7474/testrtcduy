@@ -1,4 +1,4 @@
-var socket = io("https://testrtcduy.herokuapp.com/")
+var socket = io("testrtcduy.herokuapp.com")
 
 
 
