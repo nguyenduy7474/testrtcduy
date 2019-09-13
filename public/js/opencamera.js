@@ -61,7 +61,6 @@ socket.on('SendOfferConnect', (offer) => {
 })
 
 $("#start").click(() => {
-    socket.disconnect()
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then((stream) => {
             p = new SimplePeer({
