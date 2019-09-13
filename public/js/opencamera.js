@@ -41,7 +41,7 @@ socket.on('SendOfferConnect', (offer) => {
 
         p2.on('signal', (answer) => {
             console.log(answer)
-            socket.emit("aaa", {answer: answer, idsocket: offer.idsocket})
+            socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket})
         })
         p2.signal(JSON.parse(offer.offer))
 
@@ -79,7 +79,6 @@ $("#start").click(() => {
 })
 
 socket.on('SendAnswerToConnect', (answer) => {
-    console.log(answer)
     p.signal(answer)
     p.on('signal', () => {
         console.log('s')

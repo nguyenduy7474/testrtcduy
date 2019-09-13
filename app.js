@@ -65,21 +65,19 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 //launch ======================================================================
 var server = require('http').createServer(app);
 const io = require('socket.io')(server);
-var arrsocketid = []
+
 io.on('connection', (socket) => { 
-	
+	console.log('kkk')
 
 	socket.on('disconnect', () => {
-		console.log('???')
 		Savedata.deleteOne({idsocket: socket.id}, (err) => {
-			console.log('cay')
 		})
 	})
 
 	socket.on('SendOfferToServer', (offer) => {
 		Savedata.findOne({datatype: "savedata"}, (err, data) => {
 			if(data){
-				io.sockets.emit("SendOfferConnect", data)
+				socket.emit("SendOfferConnect", data)
 			}else{
 				let data = {
 					offer: JSON.stringify(offer),
@@ -93,14 +91,8 @@ io.on('connection', (socket) => {
 
 	})
 
-	socket.on('aaa', (answer) => {
-		console.log(arrsocketid.indexOf(answer.idsocket))
-		console.log(arrsocketid)
-		if(arrsocketid.indexOf(answer.idsocket) == -1){
-			console.log(answer.idsocket)
-			arrsocketid.push(answer.idsocket)
-			io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
-		}
+	socket.on('SendAnswerToServer', (answer) => {
+		io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
 	})
 });
 
