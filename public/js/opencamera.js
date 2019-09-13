@@ -9,24 +9,26 @@ navigator.getUserMedia = navigator.getUserMedia ||
 var p = null
 var p2 = null
 
-function bindEvent(p){
+/*function startchat(){
+    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    .then((stream) => {
+            p = new SimplePeer({
+                initiator: true,
+                stream: stream,
+                trickle: false
+            })
 
-    p.on('err', (err) => {
-        console.log("loi~: ", err)
-    })
+            p.on('signal', (offer) => {
+                socket.emit("SendOfferToServer", offer)
+            })
 
-    p.on('signal', (data) => {
-        console.log('aa')
-        $("#offer").val(JSON.stringify(data))
-    })
+            var localStream = document.getElementById("localStream")
+            localStream.srcObject = stream;
+            localStream.play()
+        })
+    .catch((err) =>{console.log(err)})
+}*/
 
-    p.on('stream', (stream) =>{
-        var friendStream = document.getElementById("friendStream")
-        friendStream.srcObject = stream
-        friendStream.play()
-    })
-
-}
 
 socket.on('SendOfferConnect', (offer) => {
     
@@ -40,9 +42,9 @@ socket.on('SendOfferConnect', (offer) => {
         
 
         p2.on('signal', (answer) => {
-            console.log(answer)
             socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket})
         })
+
         p2.signal(JSON.parse(offer.offer))
 
         p2.on('stream', (stream) =>{
@@ -59,6 +61,7 @@ socket.on('SendOfferConnect', (offer) => {
 })
 
 $("#start").click(() => {
+    socket.disconnect()
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then((stream) => {
             p = new SimplePeer({
@@ -81,7 +84,7 @@ $("#start").click(() => {
 socket.on('SendAnswerToConnect', (answer) => {
     p.signal(answer)
     p.on('signal', () => {
-        console.log('s')
+        console.log('ok')
     })
     p.on('stream', (stream) =>{
         var friendStream = document.getElementById("friendStream")

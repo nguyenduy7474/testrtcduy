@@ -67,10 +67,11 @@ var server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 io.on('connection', (socket) => { 
-	console.log('kkk')
+	console.log(socket.id)
 
 	socket.on('disconnect', () => {
 		Savedata.deleteOne({idsocket: socket.id}, (err) => {
+			console.log("deletexong")
 		})
 	})
 
@@ -92,7 +93,10 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('SendAnswerToServer', (answer) => {
-		io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
+		Savedata.deleteOne({idsocket: answer.idsocket}, (err) => {
+			console.log("deletexong")
+			io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
+		})
 	})
 });
 
