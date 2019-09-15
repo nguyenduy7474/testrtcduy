@@ -76,12 +76,29 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('SendOfferToServer', (offer) => {
-		Savedata.findOne({datatype: "savedata"}, (err, data) => {
-			if(data){
-				socket.emit("SendOfferConnect", data)
+		Savedata.find({datatype: "savedata"}, (err, data) => {
+			var count = null
+			if(data.length != 0){
+				for(var i=0; i< data.length; i++){
+					if(offer.alreadycall.indexOf(data[i].idsocket) == -1){
+						count = i
+						break;
+					}
+				}
+				if(count != null){
+					socket.emit("SendOfferConnect", data[count])
+				}else{
+					let data = {
+						offer: JSON.stringify(offer.offer),
+						idsocket: socket.id
+					}
+
+					let datasave = Savedata(data)
+					datasave.save()
+				}
 			}else{
 				let data = {
-					offer: JSON.stringify(offer),
+					offer: JSON.stringify(offer.offer),
 					idsocket: socket.id
 				}
 
@@ -94,8 +111,7 @@ io.on('connection', (socket) => {
 
 	socket.on('SendAnswerToServer', (answer) => {
 		Savedata.deleteOne({idsocket: answer.idsocket}, (err) => {
-			console.log("deletexong")
-			io.to(answer.idsocket).emit("SendAnswerToConnect", answer.answer)
+			io.to(answer.idsocket).emit("SendAnswerToConnect", {answer: answer.answer, socketp2: answer.socketp2})
 		})
 	})
 });

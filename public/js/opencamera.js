@@ -1,5 +1,5 @@
-var socket = io("https://testrtcduy.herokuapp.com")
-//var socket = io("localhost:3000")
+//var socket = io("https://testrtcduy.herokuapp.com")
+var socket = io("localhost:3000")
 
 
 
@@ -8,8 +8,9 @@ navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.mozGetUserMedia;
 var p = null
 var p2 = null
+var alreadycall = []
+function startchat(){
 
-/*function startchat(){
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
     .then((stream) => {
             p = new SimplePeer({
@@ -19,7 +20,13 @@ var p2 = null
             })
 
             p.on('signal', (offer) => {
-                socket.emit("SendOfferToServer", offer)
+                socket.emit("SendOfferToServer", {offer: offer, alreadycall: alreadycall})
+            })
+
+            p.on('stream', (stream) =>{
+                var friendStream = document.getElementById("friendStream")
+                friendStream.srcObject = stream
+                friendStream.play()
             })
 
             var localStream = document.getElementById("localStream")
@@ -27,8 +34,7 @@ var p2 = null
             localStream.play()
         })
     .catch((err) =>{console.log(err)})
-}*/
-
+}
 
 socket.on('SendOfferConnect', (offer) => {
     
@@ -42,7 +48,7 @@ socket.on('SendOfferConnect', (offer) => {
         
 
         p2.on('signal', (answer) => {
-            socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket})
+            socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket, socketp2: socket.id})
         })
 
         p2.signal(JSON.parse(offer.offer))
@@ -53,6 +59,11 @@ socket.on('SendOfferConnect', (offer) => {
             friendStream.play()
         })
 
+        p2.on('close', ()=>{
+            startchat()
+        })
+
+        alreadycall.push(offer.idsocket)
         var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
             localStream.play()
@@ -61,34 +72,24 @@ socket.on('SendOfferConnect', (offer) => {
 })
 
 $("#start").click(() => {
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
-    .then((stream) => {
-            p = new SimplePeer({
-                initiator: true,
-                stream: stream,
-                trickle: false
-            })
-
-            p.on('signal', (offer) => {
-                socket.emit("SendOfferToServer", offer)
-            })
-
-            var localStream = document.getElementById("localStream")
-            localStream.srcObject = stream;
-            localStream.play()
-        })
-    .catch((err) =>{console.log(err)})
+    if(p!=null){
+        p.destroy()
+    }
+    if(p2!=null){
+        p2.destroy()
+    }
+    startchat()
 })
 
 socket.on('SendAnswerToConnect', (answer) => {
-    p.signal(answer)
+    alreadycall.push(answer.socketp2)
+    p.signal(answer.answer)
     p.on('signal', () => {
         console.log('ok')
     })
-    p.on('stream', (stream) =>{
-        var friendStream = document.getElementById("friendStream")
-        friendStream.srcObject = stream
-        friendStream.play()
-    })
 
+    p.on('close', ()=>{
+        console.log('aa')
+        startchat()
+    })
 })
