@@ -1,5 +1,5 @@
-var socket = io("https://testrtcduy.herokuapp.com")
-//var socket = io("localhost:3000")
+//var socket = io("https://testrtcduy.herokuapp.com")
+var socket = io("localhost:3000")
 
 
 
@@ -59,10 +59,6 @@ socket.on('SendOfferConnect', (offer) => {
             friendStream.play()
         })
 
-        p2.on('close', ()=>{
-            startchat()
-        })
-
         alreadycall.push(offer.idsocket)
         var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
@@ -88,8 +84,9 @@ socket.on('SendAnswerToConnect', (answer) => {
         console.log('ok')
     })
 
-    p.on('close', ()=>{
-        console.log('aa')
-        startchat()
-    })
+})
+
+socket.on('Peerdisconnect', (dis) => {
+    console.log('test')
+    startchat()
 })

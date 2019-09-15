@@ -20,6 +20,7 @@ var bodyParser = require('body-parser');
 var dateFormat = require('dateformat');
 var now = new Date();
 var Savedata = require('./app/models/savedata');
+var Peercalling = require('./app/models/peercalling');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -67,11 +68,24 @@ var server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 io.on('connection', (socket) => { 
-	console.log(socket.id)
 
 	socket.on('disconnect', () => {
 		Savedata.deleteOne({idsocket: socket.id}, (err) => {
-			console.log("deletexong")
+			Peercalling.find({$or: [{peer1: socket.id}, {peer2: socket.id}]}, (errpeer, data) => {
+				var peerneeddelete
+				if(data.length != 0){
+					data = data[0]
+					if(data.peer1 == socket.id){
+						Peercalling.deleteOne({peer1: socket.id}, (err) => {
+							io.to(data.peer2).emit("Peerdisconnect", "discn")
+						})
+					}else{
+						Peercalling.deleteOne({peer2: socket.id}, (err) => {
+							io.to(data.peer1).emit("Peerdisconnect", "discn")
+						})
+					}
+				}
+			})
 		})
 	})
 
@@ -111,7 +125,13 @@ io.on('connection', (socket) => {
 
 	socket.on('SendAnswerToServer', (answer) => {
 		Savedata.deleteOne({idsocket: answer.idsocket}, (err) => {
-			io.to(answer.idsocket).emit("SendAnswerToConnect", {answer: answer.answer, socketp2: answer.socketp2})
+			let data = Peercalling({
+				peer1: answer.idsocket,
+				peer2: socket.id
+			})
+			data.save((err) => {
+				io.to(answer.idsocket).emit("SendAnswerToConnect", {answer: answer.answer, socketp2: answer.socketp2})
+			})
 		})
 	})
 });
