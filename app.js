@@ -70,7 +70,6 @@ const io = require('socket.io')(server);
 io.on('connection', (socket) => { 
 
 	socket.on('disconnect', () => {
-		console.log('aa')
 		Savedata.deleteOne({idsocket: socket.id}, (err) => {
 			Peercalling.find({$or: [{peer1: socket.id}, {peer2: socket.id}]}, (errpeer, data) => {
 				var peerneeddelete
