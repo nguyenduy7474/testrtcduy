@@ -1,5 +1,5 @@
-var socket = io("https://testrtcduy.herokuapp.com")
-//var socket = io("localhost:3000")
+//var socket = io("https://testrtcduy.herokuapp.com")
+var socket = io("localhost:3000")
 
 
 
@@ -45,7 +45,6 @@ socket.on('SendOfferConnect', (offer) => {
             stream: stream,
             trickle: false
         })
-        
 
         p2.on('signal', (answer) => {
             socket.emit("SendAnswerToServer", {answer: answer, idsocket: offer.idsocket, socketp2: socket.id})
@@ -68,12 +67,21 @@ socket.on('SendOfferConnect', (offer) => {
 })
 
 $("#start").click(() => {
+    socket.disconnect()
+    socket.connect()
     if(p!=null){
         p.destroy()
+        var friendStream = document.getElementById("friendStream")
+        friendStream.load()
     }
     if(p2!=null){
         p2.destroy()
+        var friendStream = document.getElementById("friendStream")
+        friendStream.load()
     }
+
+
+
     startchat()
 })
 
@@ -83,10 +91,11 @@ socket.on('SendAnswerToConnect', (answer) => {
     p.on('signal', () => {
         console.log('ok')
     })
-
 })
 
 socket.on('Peerdisconnect', (dis) => {
-    console.log('test')
+    console.log('ss')
+    var friendStream = document.getElementById("friendStream")
+    friendStream.load()
     startchat()
 })
