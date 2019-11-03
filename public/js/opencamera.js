@@ -86,6 +86,7 @@ $("#start").click(() => {
 })
 
 socket.on('SendAnswerToConnect', (answer) => {
+    console.log(answer)
     alreadycall.push(answer.socketp2)
     p.signal(answer.answer)
     p.on('signal', () => {
