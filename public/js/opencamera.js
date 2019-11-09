@@ -17,7 +17,7 @@ function startchat(){
                 initiator: true,
                 stream: stream,
                 trickle: false,
-                config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }] }
+                config: { iceServers: [{ url: 'stun:stun.l.google.com:19302' }, { url: 'stun:global.stun.twilio.com:3478?transport=udp' }] }
             })
 
             p.on('signal', (offer) => {
@@ -45,7 +45,7 @@ socket.on('SendOfferConnect', (offer) => {
             initiator: false,
             stream: stream,
             trickle: false,
-            config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }] }
+            config: { iceServers: [{ url: 'stun:stun.l.google.com:19302' }, { url: 'stun:global.stun.twilio.com:3478?transport=udp' }] }
         })
 
         p2.on('signal', (answer) => {
