@@ -1,6 +1,6 @@
-var socket = io("https://testrtcduy.herokuapp.com")
+//var socket = io("https://testrtcduy.herokuapp.com")
 //var socket = io("localhost:3000")
-//var socket = io("https://2d484c20.ngrok.io/")
+var socket = io("https://803a6927.ngrok.io")
 
 
 navigator.getUserMedia = navigator.getUserMedia ||
@@ -11,7 +11,7 @@ var p2 = null
 var alreadycall = []
 function startchat(){
 
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: false})
     .then((stream) => {
             p = new SimplePeer({
                 initiator: true,
@@ -25,31 +25,6 @@ function startchat(){
                             credential: 'muazkh',
                             username: 'webrtc@live.com'
                         },
-                        {
-                            url: 'turn:numb.viagenie.ca',
-                            credential: 'muazkh',
-                            username: 'webrtc@live.com'
-                        },
-                        {
-                            url: 'turn:192.158.29.39:3478?transport=udp',
-                            credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                            username: '28224511:1379330808'
-                        },
-                        {
-                            url: 'turn:192.158.29.39:3478?transport=tcp',
-                            credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                            username: '28224511:1379330808'
-                        },
-                        {
-                            url: 'turn:turn.bistri.com:80',
-                            credential: 'homeo',
-                            username: 'homeo'
-                         },
-                         {
-                            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                            credential: 'webrtc',
-                            username: 'webrtc'
-                        }
                     ] 
                 }
             })
@@ -61,7 +36,12 @@ function startchat(){
             p.on('stream', (stream) =>{
                 var friendStream = document.getElementById("friendStream")
                 friendStream.srcObject = stream
-                friendStream.play()
+                /*friendStream.play()*/
+                var isPlaying = friendStream.currentTime > 0 && !friendStream.paused && !friendStream.ended 
+                        && friendStream.readyState > 2;
+                if (!isPlaying) {
+                  friendStream.play()
+                }
             })
 
             var localStream = document.getElementById("localStream")
@@ -79,7 +59,7 @@ function startchat(){
 
 socket.on('SendOfferConnect', (offer) => {
     
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: false})
     .then((stream) => {
         p2 = new SimplePeer({
             initiator: false,
@@ -93,31 +73,6 @@ socket.on('SendOfferConnect', (offer) => {
                         credential: 'muazkh',
                         username: 'webrtc@live.com'
                     },
-                    {
-                        url: 'turn:numb.viagenie.ca',
-                        credential: 'muazkh',
-                        username: 'webrtc@live.com'
-                    },
-                    {
-                        url: 'turn:192.158.29.39:3478?transport=udp',
-                        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                        username: '28224511:1379330808'
-                    },
-                    {
-                        url: 'turn:192.158.29.39:3478?transport=tcp',
-                        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-                        username: '28224511:1379330808'
-                    },
-                    {
-                        url: 'turn:turn.bistri.com:80',
-                        credential: 'homeo',
-                        username: 'homeo'
-                     },
-                     {
-                        url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                        credential: 'webrtc',
-                        username: 'webrtc'
-                    }
                 ] 
             }
         })
@@ -131,7 +86,12 @@ socket.on('SendOfferConnect', (offer) => {
         p2.on('stream', (stream) =>{
             var friendStream = document.getElementById("friendStream")
             friendStream.srcObject = stream
-            friendStream.play()
+            /*friendStream.play()*/
+            var isPlaying = friendStream.currentTime > 0 && !friendStream.paused && !friendStream.ended 
+                    && friendStream.readyState > 2;
+            if (!isPlaying) {
+              friendStream.play()
+            }
         })
 
         alreadycall.push(offer.idsocket)
