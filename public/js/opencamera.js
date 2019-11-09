@@ -1,6 +1,6 @@
-var socket = io("https://testrtcduy.herokuapp.com")
+//var socket = io("https://testrtcduy.herokuapp.com")
 //var socket = io("localhost:3000")
-
+var socket = io("https://2d484c20.ngrok.io/")
 
 
 navigator.getUserMedia = navigator.getUserMedia ||
@@ -17,28 +17,14 @@ function startchat(){
                 initiator: true,
                 stream: stream,
                 trickle: false,
+                iceTransportPolicy: 'relay',
                 config: { iceServers: [
-                        {url:'stun:stun.l.google.com:19302' }, 
-                        {url:'stun:global.stun.twilio.com:3478?transport=udp' },
-                        {url:'stun:stun01.sipphone.com'},
-                        {url:'stun:stun.ekiga.net'},
-                        {url:'stun:stun.fwdnet.net'},
-                        {url:'stun:stun.ideasip.com'},
-                        {url:'stun:stun.iptel.org'},
-                        {url:'stun:stun.rixtelecom.se'},
-                        {url:'stun:stun.schlund.de'},
-                        {url:'stun:stun.l.google.com:19302'},
-                        {url:'stun:stun1.l.google.com:19302'},
-                        {url:'stun:stun2.l.google.com:19302'},
-                        {url:'stun:stun3.l.google.com:19302'},
-                        {url:'stun:stun4.l.google.com:19302'},
-                        {url:'stun:stunserver.org'},
-                        {url:'stun:stun.softjoys.com'},
-                        {url:'stun:stun.voiparound.com'},
-                        {url:'stun:stun.voipbuster.com'},
-                        {url:'stun:stun.voipstunt.com'},
-                        {url:'stun:stun.voxgratia.org'},
-                        {url:'stun:stun.xten.com'},
+                        {urls:'stun:stun.l.google.com:19302' },
+                        {
+                            url: 'turn:numb.viagenie.ca',
+                            credential: 'muazkh',
+                            username: 'webrtc@live.com'
+                        },
                         {
                             url: 'turn:numb.viagenie.ca',
                             credential: 'muazkh',
@@ -53,6 +39,16 @@ function startchat(){
                             url: 'turn:192.158.29.39:3478?transport=tcp',
                             credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
                             username: '28224511:1379330808'
+                        },
+                        {
+                            url: 'turn:turn.bistri.com:80',
+                            credential: 'homeo',
+                            username: 'homeo'
+                         },
+                         {
+                            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                            credential: 'webrtc',
+                            username: 'webrtc'
                         }
                     ] 
                 }
@@ -70,7 +66,13 @@ function startchat(){
 
             var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
-            localStream.play()
+            
+            var isPlaying = localStream.currentTime > 0 && !localStream.paused && !localStream.ended 
+                    && localStream.readyState > 2;
+                    console.log("aa " + isPlaying)
+            if (!isPlaying) {
+              localStream.play()
+            }
         })
     .catch((err) =>{console.log(err)})
 }
@@ -83,28 +85,14 @@ socket.on('SendOfferConnect', (offer) => {
             initiator: false,
             stream: stream,
             trickle: false,
+            iceTransportPolicy: 'relay',
             config: { iceServers: [
-                    {url:'stun:stun.l.google.com:19302' }, 
-                    {url:'stun:global.stun.twilio.com:3478?transport=udp' },
-                    {url:'stun:stun01.sipphone.com'},
-                    {url:'stun:stun.ekiga.net'},
-                    {url:'stun:stun.fwdnet.net'},
-                    {url:'stun:stun.ideasip.com'},
-                    {url:'stun:stun.iptel.org'},
-                    {url:'stun:stun.rixtelecom.se'},
-                    {url:'stun:stun.schlund.de'},
-                    {url:'stun:stun.l.google.com:19302'},
-                    {url:'stun:stun1.l.google.com:19302'},
-                    {url:'stun:stun2.l.google.com:19302'},
-                    {url:'stun:stun3.l.google.com:19302'},
-                    {url:'stun:stun4.l.google.com:19302'},
-                    {url:'stun:stunserver.org'},
-                    {url:'stun:stun.softjoys.com'},
-                    {url:'stun:stun.voiparound.com'},
-                    {url:'stun:stun.voipbuster.com'},
-                    {url:'stun:stun.voipstunt.com'},
-                    {url:'stun:stun.voxgratia.org'},
-                    {url:'stun:stun.xten.com'},
+                    {urls:'stun:stun.l.google.com:19302' },
+                    {
+                        url: 'turn:numb.viagenie.ca',
+                        credential: 'muazkh',
+                        username: 'webrtc@live.com'
+                    },
                     {
                         url: 'turn:numb.viagenie.ca',
                         credential: 'muazkh',
@@ -119,6 +107,16 @@ socket.on('SendOfferConnect', (offer) => {
                         url: 'turn:192.158.29.39:3478?transport=tcp',
                         credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
                         username: '28224511:1379330808'
+                    },
+                    {
+                        url: 'turn:turn.bistri.com:80',
+                        credential: 'homeo',
+                        username: 'homeo'
+                     },
+                     {
+                        url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                        credential: 'webrtc',
+                        username: 'webrtc'
                     }
                 ] 
             }
@@ -137,9 +135,16 @@ socket.on('SendOfferConnect', (offer) => {
         })
 
         alreadycall.push(offer.idsocket)
+
         var localStream = document.getElementById("localStream")
-            localStream.srcObject = stream;
-            localStream.play()
+        localStream.srcObject = stream;
+        
+        var isPlaying = localStream.currentTime > 0 && !localStream.paused && !localStream.ended 
+                && localStream.readyState > 2;
+                console.log("bb " + isPlaying)
+        if (!isPlaying) {
+          localStream.play()
+        }
     })
     .catch((err) => {})
 })
