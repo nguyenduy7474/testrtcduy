@@ -3,7 +3,8 @@ var socket = io("https://testrtcduy.herokuapp.com")
 //var socket = io("https://803a6927.ngrok.io")
 
 
-navigator.getUserMedia = navigator.getUserMedia ||
+navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || 
+                            navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 var p = null
