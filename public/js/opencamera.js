@@ -25,11 +25,6 @@ function startchat(){
                             credential: 'muazkh',
                             username: 'webrtc@live.com'
                         },
-/*                        {
-                            url: 'turn:turn.bistri.com:80',
-                            credential: 'homeo',
-                            username: 'homeo'
-                        },*/
                     ] 
                 }
             })
@@ -40,8 +35,9 @@ function startchat(){
 
             p.on('stream', (stream) =>{
                 var friendStream = document.getElementById("friendStream")
+                
                 friendStream.srcObject = stream
-                /*friendStream.play()*/
+
                 var isPlaying = friendStream.currentTime > 0 && !friendStream.paused && !friendStream.ended 
                         && friendStream.readyState > 2;
                 if (!isPlaying) {
@@ -51,7 +47,7 @@ function startchat(){
 
             var localStream = document.getElementById("localStream")
             localStream.srcObject = stream;
-            
+            localStream.muted = true;
             var isPlaying = localStream.currentTime > 0 && !localStream.paused && !localStream.ended 
                     && localStream.readyState > 2;
                     console.log("aa " + isPlaying)
@@ -77,11 +73,6 @@ socket.on('SendOfferConnect', (offer) => {
                         credential: 'muazkh',
                         username: 'webrtc@live.com'
                     },
-/*                    {
-                        url: 'turn:turn.bistri.com:80',
-                        credential: 'homeo',
-                        username: 'homeo'
-                    },*/
                 ] 
             }
         })
@@ -95,7 +86,7 @@ socket.on('SendOfferConnect', (offer) => {
         p2.on('stream', (stream) =>{
             var friendStream = document.getElementById("friendStream")
             friendStream.srcObject = stream
-            /*friendStream.play()*/
+
             var isPlaying = friendStream.currentTime > 0 && !friendStream.paused && !friendStream.ended 
                     && friendStream.readyState > 2;
             if (!isPlaying) {
@@ -107,7 +98,7 @@ socket.on('SendOfferConnect', (offer) => {
 
         var localStream = document.getElementById("localStream")
         localStream.srcObject = stream;
-        
+        localStream.muted = true;
         var isPlaying = localStream.currentTime > 0 && !localStream.paused && !localStream.ended 
                 && localStream.readyState > 2;
                 console.log("bb " + isPlaying)
