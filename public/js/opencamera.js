@@ -1,6 +1,6 @@
 var socket = io("https://testrtcduy.herokuapp.com")
 //var socket = io("localhost:3000")
-//var socket = io("https://2a6ee087.ngrok.io")
+//var socket = io("https://bb7f573a.ngrok.io")
 
 
 navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || 
@@ -12,7 +12,7 @@ var p2 = null
 var alreadycall = []
 function startchat(){
 
-    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: true})
+    navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
     .then((stream) => {
             p = new SimplePeer({
                 initiator: true,
@@ -60,7 +60,7 @@ function startchat(){
 
 socket.on('SendOfferConnect', (offer) => {
     
-    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: true})
+    navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
     .then((stream) => {
         p2 = new SimplePeer({
             initiator: false,
