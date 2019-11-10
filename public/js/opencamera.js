@@ -1,6 +1,6 @@
-var socket = io("https://testrtcduy.herokuapp.com")
+//var socket = io("https://testrtcduy.herokuapp.com")
 //var socket = io("localhost:3000")
-//var socket = io("https://803a6927.ngrok.io")
+var socket = io("https://2a6ee087.ngrok.io")
 
 
 navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || 
@@ -12,13 +12,12 @@ var p2 = null
 var alreadycall = []
 function startchat(){
 
-    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: false})
+    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: true})
     .then((stream) => {
             p = new SimplePeer({
                 initiator: true,
                 stream: stream,
                 trickle: false,
-                iceTransportPolicy: 'relay',
                 config: { iceServers: [
                         {urls:'stun:stun.l.google.com:19302' },
                         {
@@ -26,6 +25,11 @@ function startchat(){
                             credential: 'muazkh',
                             username: 'webrtc@live.com'
                         },
+/*                        {
+                            url: 'turn:turn.bistri.com:80',
+                            credential: 'homeo',
+                            username: 'homeo'
+                        },*/
                     ] 
                 }
             })
@@ -60,13 +64,12 @@ function startchat(){
 
 socket.on('SendOfferConnect', (offer) => {
     
-    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: false})
+    navigator.mediaDevices.getUserMedia({video: { width: 200, height: 200 }, audio: true})
     .then((stream) => {
         p2 = new SimplePeer({
             initiator: false,
             stream: stream,
             trickle: false,
-            iceTransportPolicy: 'relay',
             config: { iceServers: [
                     {urls:'stun:stun.l.google.com:19302' },
                     {
@@ -74,6 +77,11 @@ socket.on('SendOfferConnect', (offer) => {
                         credential: 'muazkh',
                         username: 'webrtc@live.com'
                     },
+/*                    {
+                        url: 'turn:turn.bistri.com:80',
+                        credential: 'homeo',
+                        username: 'homeo'
+                    },*/
                 ] 
             }
         })
