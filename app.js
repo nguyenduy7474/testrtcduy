@@ -69,6 +69,10 @@ const io = require('socket.io')(server);
 
 io.on('connection', (socket) => { 
 
+	Savedata.find({}, (err, data) => {
+		socket.emit("listphong", data)
+	})
+
 	socket.on('disconnect', () => {
 		Savedata.deleteOne({idsocket: socket.id}, (err) => {
 			Peercalling.find({$or: [{peer1: socket.id}, {peer2: socket.id}]}, (errpeer, data) => {
@@ -90,48 +94,24 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('SendOfferToServer', (offer) => {
-		Savedata.find({datatype: "savedata"}, (err, data) => {
-			var count = null
-			if(data.length != 0){
-				for(var i=0; i< data.length; i++){
-					if(offer.alreadycall.indexOf(data[i].idsocket) == -1){
-						count = i
-						break;
-					}
-				}
-				if(count != null){
-					socket.emit("SendOfferConnect", data[count])
-				}else{
-					let data = {
-						offer: JSON.stringify(offer.offer),
-						idsocket: socket.id
-					}
+		let data = {
+			offer: JSON.stringify(offer.offer),
+			idsocket: socket.id,
+			roomnumber: offer.roomnumber,
+			type: offer.type,
+			res: offer.res
+		}
 
-					let datasave = Savedata(data)
-					datasave.save()
-				}
-			}else{
-				let data = {
-					offer: JSON.stringify(offer.offer),
-					idsocket: socket.id
-				}
+		let datasave = Savedata(data)
+		datasave.save()
 
-				let datasave = Savedata(data)
-				datasave.save()
-			}
-		})
+		io.emit("showpeer", data)
 
 	})
 
 	socket.on('SendAnswerToServer', (answer) => {
-		Savedata.deleteOne({idsocket: answer.idsocket}, (err) => {
-			let data = Peercalling({
-				peer1: answer.idsocket,
-				peer2: socket.id
-			})
-			data.save((err) => {
-				io.to(answer.idsocket).emit("SendAnswerToConnect", {answer: answer.answer, socketp2: answer.socketp2})
-			})
+		Savedata.deleteOne({roomnumber: answer.roomnumber}, (err) => {
+			io.to(answer.idsocket).emit("SendAnswerToConnect", {answer: answer.answer})
 		})
 	})
 });
