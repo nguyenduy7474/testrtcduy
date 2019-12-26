@@ -1,6 +1,6 @@
 var socket = io("https://testrtcduy.herokuapp.com")
 //var socket = io("localhost:3000")
-/*var socket = io("https://ca494614.ngrok.io")*/
+/*var socket = io("https://6158b933.ngrok.io")*/
 
 
 navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || 
@@ -57,11 +57,41 @@ async function startchat(deviceid, roomnumber, type, contraint = {video: {height
             trickle: false,
             config: { iceServers: [
                     {urls:'stun:stun.l.google.com:19302' },
+                    {urls:'stun:stun1.l.google.com:19302' },
+                    {urls:'stun:stun2.l.google.com:19302' },
+                    {urls:'stun:stun3.l.google.com:19302' },
+                    {urls:'stun:stun4.l.google.com:19302' },
                     {
                         url: 'turn:numb.viagenie.ca',
                         credential: 'muazkh',
                         username: 'webrtc@live.com'
                     },
+                    {
+                        url: 'turn:192.158.29.39:3478?transport=udp',
+                        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                        username: '28224511:1379330808'
+                    },
+                    {
+                        url: 'turn:192.158.29.39:3478?transport=tcp',
+                        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                        username: '28224511:1379330808'
+                    },
+                    {
+                        url: 'turn:turn.bistri.com:80',
+                        credential: 'homeo',
+                        username: 'homeo'
+                     },
+                     {
+                        url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                        credential: 'webrtc',
+                        username: 'webrtc'
+                    }
+/*                    {
+                        url: 'turn:103.90.224.63',
+                        credential: 'duy123456789',
+                        username: 'nguyenduy7474'
+                    },*/
+
                 ] 
             }
         })
