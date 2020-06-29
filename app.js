@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
 			idsocket: socket.id,
 			roomnumber: offer.roomnumber,
 			type: offer.type,
-			res: offer.res
+/*			res: offer.res*/
 		}
 
 		let datasave = Savedata(data)
