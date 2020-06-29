@@ -1,6 +1,6 @@
-//var socket = io("https://testrtcduy.herokuapp.com")
+var socket = io("https://testrtcduy123.herokuapp.com")
 //var socket = io("localhost:3000")
-var socket = io("https://c46ba683f1da.ngrok.io")
+//var socket = io("https://c46ba683f1da.ngrok.io")
 
 
 navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || 
